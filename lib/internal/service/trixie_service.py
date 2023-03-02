@@ -6,6 +6,7 @@ from lib.external.mCommon3.service import serialcomm_service as ser
 
 
 def send(config: TrixieConfig, message):
+    print(message)
     ser.send_message(config.InputComm, message.encode("utf-8"))
 
 
@@ -66,21 +67,19 @@ def set_state(config, line):
         return
 
     if channel == 1:
-        if not config.Channel1.Voltage:
-            send(config, f"Error. No voltage has been set for Channel 1. Use the set command to do this first.\n")
-            return
-
         if state == "on":
+            if config.Channel1.Voltage is None:
+                send(config, f"Error. No voltage has been set for Channel 1. Use the set command to do this first.\n")
+                return
             ppk.turn_on_voltage(config.Channel1)
         else:
             ppk.turn_off_voltage(config.Channel1)
         send(config, f"Success. Turned {state} Channel 1's voltage to: {config.Channel1.Voltage}mV.\n")
     if channel == 2:
-        if not config.Channel2.Voltage:
-            send(config, f"Error. No voltage has been set for Channel 2. Use the set command to do this first.\n")
-            return
-
         if state == "on":
+            if config.Channel2.Voltage is None:
+                send(config, f"Error. No voltage has been set for Channel 2. Use the set command to do this first.\n")
+                return
             ppk.turn_on_voltage(config.Channel2)
         else:
             ppk.turn_off_voltage(config.Channel2)
@@ -112,7 +111,7 @@ def get_current(config, line):
         except:
             send(config, f"Error. Voltage not set on Channel 2.\n")
         else:
-            send(config, f"current|1|{current_ua}|ua\n")
+            send(config, f"current|2|{current_ua}|ua\n")
 
 
 def uart_listen(config: TrixieConfig):
@@ -129,6 +128,8 @@ def uart_listen(config: TrixieConfig):
             set_state(config, line)
         elif b'get' in line:
             get_current(config, line)
+        elif b'exit' in line:
+            exit(0)
         else:
             send(config, f"Invalid command:\n\t{line}\nEnter help for list of valid commands.\n")
 
