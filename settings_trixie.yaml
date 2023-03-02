@@ -1,9 +1,9 @@
 Channel1:
-  Port: /dev/ttyACM8
+  Port: /dev/ttyACM0
 
 Channel2:
-  Port: /dev/ttyACM9
+  Port: /dev/ttyACM1
 
 InputComm:
-  Port: /dev/ttyUSB1
+  Port: /dev/ttyUSB0
   Baud: 115200

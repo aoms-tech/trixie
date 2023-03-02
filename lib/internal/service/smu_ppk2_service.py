@@ -8,13 +8,12 @@ from lib.internal.model.smu_ppk2 import SMUPPK2Config
 def connect(config: SMUPPK2Config):
     config.Device = PPK2_API(config.Port)
     config.Device.get_modifiers()
+    config.Device.use_source_meter()
 
 
 def set_voltage_mv(config: SMUPPK2Config, voltage):
     if voltage > 5000 or voltage < 0:
         raise ValueError
-
-    config.Device.use_source_meter()
     config.Device.set_source_voltage(voltage)
 
 
