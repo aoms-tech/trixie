@@ -1,8 +1,8 @@
 Channel1:
-  Port: /dev/ttyACM0
+  ID: C328ACB4582B
 
 Channel2:
-  Port: /dev/ttyACM1
+  ID: C952735BDB56
 
 InputComm:
   Port: /dev/ttyUSB0

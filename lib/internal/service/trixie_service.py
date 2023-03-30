@@ -136,6 +136,9 @@ def uart_listen(config: TrixieConfig):
 
 def run_application(config: TrixieConfig):
     print("Welcome to Trixie.")
+    ppk.find_port(config.Channel1)
+    ppk.find_port(config.Channel2)
+
     ppk.connect(config.Channel1)
     ppk.connect(config.Channel2)
 
