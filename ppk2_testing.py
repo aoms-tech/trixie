@@ -1,10 +1,10 @@
-from ppk2_api.ppk2_api import PPK2_API
+from lib.external.pythontools.ppk2_api_modified import PPK2_API
 import time
 
-sm1 = PPK2_API("/dev/ttyACM2")  # serial port will be different for you
+sm1 = PPK2_API("/dev/ttyACM1")  # serial port will be different for you
 sm1.get_modifiers()
 sm1.use_source_meter()  # set source meter mode
-sm1.set_source_voltage(3600)  # set source voltage in mV
+sm1.set_source_voltage(4200)  # set source voltage in mV
 sm1.toggle_DUT_power("ON")
 # sm1.start_measuring()  # start measuring
 

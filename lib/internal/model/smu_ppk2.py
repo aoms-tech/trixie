@@ -1,5 +1,5 @@
 from lib.external.pythontools.dict_adaptable import DictAdaptable
-from ppk2_api.ppk2_api import PPK2_API
+from lib.external.pythontools.ppk2_api_modified import PPK2_API
 
 
 # ==================== Settings for PPK2 ======================= #

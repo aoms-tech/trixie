@@ -1,4 +1,6 @@
 import logging
+import RPi.GPIO as GPIO
+import time
 
 from lib.internal.model.trixie import TrixieConfig
 from lib.internal.service import smu_ppk2_service as ppk
@@ -114,6 +116,18 @@ def get_current(config, line):
             send(config, f"current|2|{current_ua}|ua\n")
 
 
+def power_channel1():
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(23, GPIO.OUT)
+    GPIO.output(23, GPIO.HIGH)
+
+
+def power_channel2():
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(24, GPIO.OUT)
+    GPIO.output(24, GPIO.HIGH)
+
+
 def uart_listen(config: TrixieConfig):
     line = ser.read_message(config.InputComm)
     if line:
@@ -130,12 +144,19 @@ def uart_listen(config: TrixieConfig):
             get_current(config, line)
         elif b'exit' in line:
             exit(0)
+        elif b'hello' in line:
+            send(config, f"Hello!\n")
         else:
             send(config, f"Invalid command:\n\t{line}\nEnter help for list of valid commands.\n")
 
 
 def run_application(config: TrixieConfig):
     print("Welcome to Trixie.")
+    power_channel1()
+    power_channel2()
+
+    time.sleep(4)
+
     ppk.find_port(config.Channel1)
     ppk.find_port(config.Channel2)
 
