@@ -39,7 +39,7 @@ def turn_on_voltage(config: SMUPPK2Config):
         config.Device.disconnect_device()
         find_port(config)
         connect(config)
-        set_voltage_mv(config, config.Voltage)
+        set_voltage_mv(config, config.OutputVoltage)
         config.Device.toggle_DUT_power("ON")
 
 
@@ -50,7 +50,7 @@ def turn_off_voltage(config: SMUPPK2Config):
         config.Device.disconnect_device()
         find_port(config)
         connect(config)
-        set_voltage_mv(config, config.Voltage)
+        set_voltage_mv(config, config.OutputVoltage)
         config.Device.toggle_DUT_power("OFF")
 
 
@@ -65,3 +65,26 @@ def get_current_reading(config: SMUPPK2Config):
             current_ua = sum(samples) / len(samples)
     config.Device.stop_measuring()
     return current_ua
+
+
+def update_output_from_fb(config: SMUPPK2Config, fb_voltage):
+    fb_voltage = fb_voltage * 1000
+    if (fb_voltage < (config.IntendedVoltage - 50)) or (fb_voltage > (config.IntendedVoltage + 50)):
+        if fb_voltage:
+            print(f"Updating output voltage to better match intended voltage ...")
+            print(f"ORG Output Voltage: {config.OutputVoltage}")
+            new_voltage = (config.OutputVoltage * config.IntendedVoltage) / fb_voltage
+            print(f"NEW Output Voltage: {new_voltage}")
+            try:
+                set_voltage_mv(config, new_voltage)
+            except:
+                print("New voltage failed to set.")
+            else:
+                config.OutputVoltage = new_voltage
+
+
+def apply_current_fb_offset(config: SMUPPK2Config, uamps):
+    print(f"ORG Current: {uamps}")
+    new_uamps = ((440*uamps) - (config.IntendedVoltage*1000)) / 440
+    print(f"NEW Current: {new_uamps}")
+    return new_uamps
