@@ -22,13 +22,13 @@ def init_fb(config: TrixieConfig):
 def update_outputs(config: TrixieConfig):
     if config.Channel1.State:
         ch1_fb_input = AnalogIn(config.Feedback, MCP.P0)
-        ch1_fb = round(ch1_fb_input.voltage*2, 2)
+        ch1_fb = round((ch1_fb_input.voltage*2)+0.1, 2)
         print(f"Channel 1 FB Voltage: {ch1_fb}V")
         ppk.update_output_from_fb(config.Channel1, ch1_fb)
 
     if config.Channel2.State:
         ch2_fb_input = AnalogIn(config.Feedback, MCP.P1)
-        ch2_fb = round(ch2_fb_input.voltage*2, 2)
+        ch2_fb = round((ch2_fb_input.voltage*2)+0.1, 2)
         print(f"Channel 2 FB Voltage: {ch2_fb}V")
         ppk.update_output_from_fb(config.Channel2, ch2_fb)
 

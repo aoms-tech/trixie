@@ -69,7 +69,7 @@ def get_current_reading(config: SMUPPK2Config):
 
 def update_output_from_fb(config: SMUPPK2Config, fb_voltage):
     fb_voltage = fb_voltage * 1000
-    if (fb_voltage < (config.IntendedVoltage - 50)) or (fb_voltage > (config.IntendedVoltage + 50)):
+    if (fb_voltage < (config.IntendedVoltage - 20)) or (fb_voltage > (config.IntendedVoltage + 20)):
         if fb_voltage:
             print(f"Updating output voltage to better match intended voltage ...")
             print(f"ORG Output Voltage: {config.OutputVoltage}")
@@ -85,6 +85,6 @@ def update_output_from_fb(config: SMUPPK2Config, fb_voltage):
 
 def apply_current_fb_offset(config: SMUPPK2Config, uamps):
     print(f"ORG Current: {uamps}")
-    new_uamps = ((440*uamps) - (config.IntendedVoltage*1000)) / 440
+    new_uamps = (((940000*uamps) - (config.IntendedVoltage*1000)) / 940000)
     print(f"NEW Current: {new_uamps}")
     return new_uamps
